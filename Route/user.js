@@ -4,6 +4,27 @@ import bcrypt from "bcrypt";
 import multer from "multer";
 import path from "path";
 import jwt from "jsonwebtoken";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+// var JwtStrategy = require('passport-jwt').Strategy,
+//     ExtractJwt = require('passport-jwt').ExtractJwt;
+import passport from "passport";
+
+const secret = process.env.secret;
+
+let opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = secret;
+passport.use(
+  new JwtStrategy(opts, async (jwt_payload, done) => {
+    try {
+      const user = await User.findById(jwt_payload.sub);
+      if (!user) {
+        return done(err, null);
+      }
+      return done(null, user);
+    } catch (error) {}
+  })
+);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -97,7 +118,8 @@ router.post("/login", async (req, res) => {
   }
   const token = jwt.sign(
     { sub: user.id, name: user.name },
-    process.env.secret,
+    // process.env.secret,
+    secret,
     { expiresIn: "1h" }
   );
 

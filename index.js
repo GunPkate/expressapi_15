@@ -2,7 +2,7 @@
 import express from "express";
 // require('dotenv').config() //use function from dotenv
 // import * as dotenv from "dotenv"; //default export
-import {PORT} from './configure/index.js'
+import { MONGOURL, PORT } from "./configure/index.js";
 import morgan from "morgan";
 import fs from "fs";
 import path from "path";
@@ -10,10 +10,9 @@ import { fileURLToPath } from "url";
 import userRouter from "./Route/user.js";
 import mongoose from "mongoose";
 import passport from "passport";
-import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 
 await mongoose
-  .connect("mongodb://localhost:27017/demoapi15")
+  .connect(MONGOURL)
   .then(() => console.log("Connected to Database"))
   .catch((err) => console.log(err)); //awiat to wait unitl function done
 

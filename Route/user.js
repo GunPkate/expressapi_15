@@ -3,6 +3,7 @@ import User from "../model/User.js";
 import bcrypt from "bcrypt";
 import multer from "multer";
 import path from "path";
+import jwt from "jsonwebtoken";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -87,17 +88,23 @@ router.post("/login", async (req, res) => {
     });
   }
   // bcrypt.compare(myPlaintextPassword, hash, function (err, result) );
-  const isValid = await bcrypt.compare(password,user.password)
-  if(!isValid){
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) {
     return res.status(400).json({
       resultCode: 40000,
       resultDescription: "Invalid User",
     });
   }
+  const token = jwt.sign(
+    { sub: user.id, name: user.name },
+    process.env.secret,
+    { expiresIn: "1h" }
+  );
+
   res.status(200).json({
     resultCode: 20000,
     resultDescription: "Success",
-    resultData: "login success",
+    resultData: token,
   });
 });
 //module.export = router;

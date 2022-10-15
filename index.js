@@ -1,8 +1,8 @@
 // const express = require('express'); //import library
 import express from "express";
 // require('dotenv').config() //use function from dotenv
-import * as dotenv from "dotenv"; //default export
-dotenv.config();
+// import * as dotenv from "dotenv"; //default export
+import {PORT} from './configure/index.js'
 import morgan from "morgan";
 import fs from "fs";
 import path from "path";
@@ -21,6 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express(); //use function
+// dotenv.config();
 app.use(passport.initialize());
 app.use(express.json()); //body
 app.use(express.urlencoded({ extended: false })); //image
@@ -36,23 +37,7 @@ app.use(
   })
 );
 
-const port = process.env.port || 4000; //set default
-
-// const secret = process.env.secret;
-// let opts = {};
-// opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-// opts.secretOrKey = secret;
-// passport.use(
-//   new JwtStrategy(opts, async (jwt_payload, done) => {
-//     try {
-//       const user = await User.findById(jwt_payload.sub);
-//       if (!user) {
-//         return done(err, null);
-//       }
-//       return done(null, user);
-//     } catch (error) {}
-//   })
-// );
+const port = PORT || 4000; //set default
 
 app.get("/", (req, res) => {
   res.send("Hello wolrd");

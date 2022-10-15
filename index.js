@@ -19,6 +19,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express(); //use function
+app.use(express.json()); //body
+app.use(express.urlencoded({ extended: false })); //image
 
 app.use(morgan("dev")); //morgan function
 app.use(

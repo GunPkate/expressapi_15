@@ -22,6 +22,9 @@ const app = express(); //use function
 app.use(express.json()); //body
 app.use(express.urlencoded({ extended: false })); //image
 
+
+app.use("/images", express.static(path.join(__dirname, "public", "image")));
+
 app.use(morgan("dev")); //morgan function
 app.use(
   morgan("common", {
